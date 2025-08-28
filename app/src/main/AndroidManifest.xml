@@ -25,11 +25,6 @@
         tools:ignore="DiscouragedApi,UnusedAttribute"
         tools:targetApi="35">
 
-        <!-- Add Android Auto support -->
-        <meta-data
-            android:name="com.google.android.gms.car.application"
-            android:resource="@xml/automotive_app_desc" />
-
         <activity
             android:screenOrientation="portrait"
             android:name=".ui.activity.AppActivity"
