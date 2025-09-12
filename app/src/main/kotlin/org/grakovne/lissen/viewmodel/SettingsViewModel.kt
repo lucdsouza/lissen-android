@@ -10,11 +10,12 @@ import org.grakovne.lissen.channel.common.ApiResult
 import org.grakovne.lissen.common.ColorScheme
 import org.grakovne.lissen.common.LibraryOrderingConfiguration
 import org.grakovne.lissen.common.PlaybackVolumeBoost
+import org.grakovne.lissen.common.TimeFormat
 import org.grakovne.lissen.content.LissenMediaProvider
-import org.grakovne.lissen.domain.Library
-import org.grakovne.lissen.domain.SeekTimeOption
-import org.grakovne.lissen.domain.connection.ServerRequestHeader
-import org.grakovne.lissen.domain.connection.ServerRequestHeader.Companion.clean
+import org.grakovne.lissen.lib.domain.Library
+import org.grakovne.lissen.lib.domain.SeekTimeOption
+import org.grakovne.lissen.lib.domain.connection.ServerRequestHeader
+import org.grakovne.lissen.lib.domain.connection.ServerRequestHeader.Companion.clean
 import org.grakovne.lissen.persistence.preferences.LissenSharedPreferences
 import javax.inject.Inject
 
@@ -46,6 +47,9 @@ class SettingsViewModel
     private val _preferredPlaybackVolumeBoost = MutableLiveData(preferences.getPlaybackVolumeBoost())
     val preferredPlaybackVolumeBoost = _preferredPlaybackVolumeBoost
 
+    private val _preferredTimeFormat = MutableLiveData(preferences.getTimeFormat())
+    val preferredTimeFormat = _preferredTimeFormat
+
     private val _preferredLibraryOrdering = MutableLiveData(preferences.getLibraryOrdering())
     val preferredLibraryOrdering: LiveData<LibraryOrderingConfiguration> = _preferredLibraryOrdering
 
@@ -57,6 +61,8 @@ class SettingsViewModel
 
     private val _crashReporting = MutableLiveData(preferences.getAcraEnabled())
     val crashReporting = _crashReporting
+
+    fun getTimeFormat(): TimeFormat = _preferredTimeFormat.value ?: TimeFormat.MM_SS
 
     fun preferCrashReporting(value: Boolean) {
       _crashReporting.postValue(value)
@@ -122,6 +128,11 @@ class SettingsViewModel
     fun preferPlaybackVolumeBoost(playbackVolumeBoost: PlaybackVolumeBoost) {
       _preferredPlaybackVolumeBoost.postValue(playbackVolumeBoost)
       preferences.savePlaybackVolumeBoost(playbackVolumeBoost)
+    }
+
+    fun preferTimeFormat(timeFormat: TimeFormat) {
+      _preferredTimeFormat.postValue(timeFormat)
+      preferences.saveTimeFormat(timeFormat)
     }
 
     fun preferColorScheme(colorScheme: ColorScheme) {
