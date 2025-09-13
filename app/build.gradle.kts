@@ -40,8 +40,8 @@ android {
         applicationId = "org.grakovne.lissen"
         minSdk = 28
         targetSdk = 36
-        versionCode = 10618
-        versionName = "1.6.18"
+        versionCode = 10619
+        versionName = "1.6.19"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 
@@ -160,6 +160,8 @@ dependencies {
     implementation(libs.androidx.media3.exoplayer.hls)
     implementation(libs.androidx.media3.datasource)
     implementation(libs.androidx.media3.database)
+  
+    implementation(libs.androidx.localbroadcastmanager)
 
     implementation(libs.androidx.glance)
     implementation(libs.androidx.glance.appwidget)
