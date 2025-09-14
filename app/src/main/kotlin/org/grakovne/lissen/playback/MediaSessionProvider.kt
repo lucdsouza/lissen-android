@@ -20,7 +20,6 @@ import dagger.hilt.android.qualifiers.ApplicationContext
 import org.grakovne.lissen.lib.domain.SeekTimeOption
 import org.grakovne.lissen.persistence.preferences.LissenSharedPreferences
 import org.grakovne.lissen.ui.activity.AppActivity
-import java.util.UUID
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -46,7 +45,6 @@ class MediaSessionProvider
 
       return MediaSession
         .Builder(context, exoPlayer)
-        .setId(UUID.randomUUID().toString())
         .setCallback(
           object : MediaSession.Callback {
             override fun onMediaButtonEvent(
