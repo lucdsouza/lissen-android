@@ -34,9 +34,10 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.map
 import kotlinx.coroutines.launch
 import org.grakovne.lissen.R
-import org.grakovne.lissen.content.cache.CacheState
+import org.grakovne.lissen.content.cache.persistent.CacheState
 import org.grakovne.lissen.lib.domain.CacheStatus
 import org.grakovne.lissen.lib.domain.CurrentEpisodeTimerOption
 import org.grakovne.lissen.lib.domain.DetailedItem
@@ -47,12 +48,10 @@ import org.grakovne.lissen.ui.icons.TimerPlay
 import org.grakovne.lissen.ui.navigation.AppNavigationService
 import org.grakovne.lissen.viewmodel.CachingModelView
 import org.grakovne.lissen.viewmodel.PlayerViewModel
-import org.grakovne.lissen.viewmodel.SettingsViewModel
 
 @Composable
 fun NavigationBarComposable(
   book: DetailedItem,
-  settingsViewModel: SettingsViewModel,
   playerViewModel: PlayerViewModel,
   contentCachingModelView: CachingModelView,
   navController: AppNavigationService,
@@ -64,6 +63,7 @@ fun NavigationBarComposable(
   val timerRemaining by playerViewModel.timerRemaining.observeAsState(0)
   val playbackSpeed by playerViewModel.playbackSpeed.observeAsState(1f)
   val playingQueueExpanded by playerViewModel.playingQueueExpanded.observeAsState(false)
+  val downloadEnabled by playerViewModel.book.map { book.chapters.isNotEmpty() }.observeAsState(true)
 
   val isMetadataCached by contentCachingModelView.provideCacheState(book.id).observeAsState(false)
 
@@ -89,13 +89,23 @@ fun NavigationBarComposable(
         icon = {
           Icon(
             Icons.AutoMirrored.Rounded.QueueMusic,
-            contentDescription = stringResource(R.string.player_screen_chapter_list_navigation),
+            contentDescription =
+              when (libraryType) {
+                LibraryType.LIBRARY -> stringResource(R.string.player_screen_chapter_list_navigation_library)
+                LibraryType.PODCAST -> stringResource(R.string.player_screen_chapter_list_navigation_podcast)
+                LibraryType.UNKNOWN -> stringResource(R.string.player_screen_chapter_list_navigation_items)
+              },
             modifier = Modifier.size(iconSize),
           )
         },
         label = {
           Text(
-            text = stringResource(R.string.player_screen_chapter_list_navigation),
+            text =
+              when (libraryType) {
+                LibraryType.LIBRARY -> stringResource(R.string.player_screen_chapter_list_navigation_library)
+                LibraryType.PODCAST -> stringResource(R.string.player_screen_chapter_list_navigation_podcast)
+                LibraryType.UNKNOWN -> stringResource(R.string.player_screen_chapter_list_navigation_items)
+              },
             style = labelStyle,
             maxLines = 1,
             overflow = TextOverflow.Ellipsis,
@@ -125,6 +135,7 @@ fun NavigationBarComposable(
             overflow = TextOverflow.Ellipsis,
           )
         },
+        enabled = downloadEnabled,
         selected = false,
         onClick = { downloadsExpanded = true },
         colors =
@@ -176,7 +187,9 @@ fun NavigationBarComposable(
             is DurationTimerOption, CurrentEpisodeTimerOption -> {
               Text(
                 text =
-                  timerRemaining?.toInt()?.formatTime(settingsViewModel.getTimeFormat(), false)
+                  timerRemaining
+                    ?.toInt()
+                    ?.formatTime(false)
                     ?: stringResource(R.string.player_screen_timer_navigation),
                 style = labelStyle,
                 maxLines = 1,
@@ -228,7 +241,7 @@ fun NavigationBarComposable(
             playerViewModel.book.value?.let {
               contentCachingModelView
                 .cache(
-                  mediaItemId = it.id,
+                  mediaItem = it,
                   currentPosition = playerViewModel.totalPosition.value ?: 0.0,
                   option = option,
                 )
