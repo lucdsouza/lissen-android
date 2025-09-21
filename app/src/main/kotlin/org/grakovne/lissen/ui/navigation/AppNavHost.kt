@@ -30,6 +30,7 @@ import org.grakovne.lissen.ui.screens.settings.SettingsScreen
 import org.grakovne.lissen.ui.screens.settings.advanced.AdvancedSettingsComposable
 import org.grakovne.lissen.ui.screens.settings.advanced.CustomHeadersSettingsScreen
 import org.grakovne.lissen.ui.screens.settings.advanced.SeekSettingsScreen
+import org.grakovne.lissen.ui.screens.settings.advanced.cache.CacheSettingsScreen
 import org.grakovne.lissen.ui.screens.settings.advanced.cache.CachedItemsSettingsScreen
 
 @Composable
@@ -56,6 +57,7 @@ fun AppNavHost(
       hasCredentials.not() -> ROUTE_LOGIN
       appLaunchAction == AppLaunchAction.CONTINUE_PLAYBACK && book != null ->
         "$ROUTE_PLAYER/${book.id}?bookTitle=${book.title}&bookSubtitle=${book.subtitle}&startInstantly=true"
+
       else -> ROUTE_LIBRARY
     }
 
@@ -88,7 +90,13 @@ fun AppNavHost(
       navController = navController,
       startDestination = startDestination,
     ) {
-      composable("settings_screen/cached_items") {
+      composable(
+        route = "settings_screen/cached_items",
+        enterTransition = { enterTransition },
+        exitTransition = { exitTransition },
+        popEnterTransition = { popEnterTransition },
+        popExitTransition = { popExitTransition },
+      ) {
         CachedItemsSettingsScreen(
           onBack = {
             if (navController.previousBackStackEntry != null) {
@@ -98,7 +106,29 @@ fun AppNavHost(
           imageLoader = imageLoader,
         )
       }
-      composable("library_screen") {
+      composable(
+        route = "settings_screen/cache_settings",
+        enterTransition = { enterTransition },
+        exitTransition = { exitTransition },
+        popEnterTransition = { popEnterTransition },
+        popExitTransition = { popExitTransition },
+      ) {
+        CacheSettingsScreen(
+          navController = navigationService,
+          onBack = {
+            if (navController.previousBackStackEntry != null) {
+              navController.popBackStack()
+            }
+          },
+        )
+      }
+      composable(
+        route = "library_screen",
+        enterTransition = { enterTransition },
+        exitTransition = { exitTransition },
+        popEnterTransition = { popEnterTransition },
+        popExitTransition = { popExitTransition },
+      ) {
         LibraryScreen(
           navController = navigationService,
           imageLoader = imageLoader,

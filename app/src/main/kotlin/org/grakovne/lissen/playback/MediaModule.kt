@@ -44,8 +44,6 @@ object MediaModule {
     val player =
       ExoPlayer
         .Builder(context)
-        .setSeekBackIncrementMs(10_000)
-        .setSeekForwardIncrementMs(30_000)
         .setHandleAudioBecomingNoisy(true)
         .setAudioAttributes(
           AudioAttributes
