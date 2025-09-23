@@ -98,6 +98,10 @@ class ContentCachingService : LifecycleService() {
     return super.onStartCommand(intent, flags, startId)
   }
 
+  override fun onTimeout(startId: Int) {
+    finish()
+  }
+
   private fun inProgress(): Boolean = executionStatuses.values.any { it.status == CacheStatus.Caching }
 
   private fun hasErrors(): Boolean = executionStatuses.values.any { it.status == CacheStatus.Error }
