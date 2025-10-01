@@ -1,8 +1,9 @@
 package org.grakovne.lissen.channel.audiobookshelf.common.api
 
-import android.util.Log
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
+import org.grakovne.lissen.channel.audiobookshelf.AudiobookshelfHostProvider
+import org.grakovne.lissen.channel.audiobookshelf.Host
 import org.grakovne.lissen.channel.audiobookshelf.common.client.AudiobookshelfApiClient
 import org.grakovne.lissen.channel.audiobookshelf.common.converter.LoginResponseConverter
 import org.grakovne.lissen.channel.common.ApiClient
@@ -12,6 +13,7 @@ import org.grakovne.lissen.lib.domain.UserAccount
 import org.grakovne.lissen.lib.domain.connection.ServerRequestHeader
 import org.grakovne.lissen.persistence.preferences.LissenSharedPreferences
 import retrofit2.Response
+import timber.log.Timber
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -19,11 +21,12 @@ import javax.inject.Singleton
 class AudioBookShelfApiService
   @Inject
   constructor(
+    private val hostProvider: AudiobookshelfHostProvider,
     private val preferences: LissenSharedPreferences,
     private val requestHeadersProvider: RequestHeadersProvider,
     private val loginResponseConverter: LoginResponseConverter,
   ) {
-    private var cachedHost: String? = null
+    private var cachedHost: Host? = null
     private var cachedToken: String? = null
     private var cachedAccessToken: String? = null
     private var cachedRefreshToken: String? = null
@@ -67,14 +70,14 @@ class AudioBookShelfApiService
 
         when (refreshResult) {
           is ApiResult.Error<*> -> {
-            Log.d(TAG, "Refresh token update has been failed due to: $refreshResult")
+            Timber.d("Refresh token update has been failed due to: $refreshResult")
             if (refreshResult.code == ApiError.Unauthorized) {
               preferences.clearCredentials()
             }
           }
 
           is ApiResult.Success<UserAccount> -> {
-            Log.d(TAG, "Refresh token has been updated")
+            Timber.d("Refresh token has been updated")
 
             refreshResult.data.refreshToken?.let {
               cachedRefreshToken = it
@@ -90,7 +93,7 @@ class AudioBookShelfApiService
     }
 
     private fun getClientInstance(): AudiobookshelfApiClient {
-      val host = preferences.getHost()
+      val host = hostProvider.provideHost()
       val token = preferences.getToken()
       val accessToken = preferences.getAccessToken()
       val refreshToken = preferences.getRefreshToken()
@@ -115,7 +118,7 @@ class AudioBookShelfApiService
     }
 
     private fun createClientInstance(): AudiobookshelfApiClient {
-      val host = preferences.getHost()
+      val host = hostProvider.provideHost()?.url
       val headers = requestHeadersProvider.fetchRequestHeaders()
 
       if (host.isNullOrBlank()) {
@@ -135,13 +138,9 @@ class AudioBookShelfApiService
     }
 
     private fun isClientChanged(
-      host: String?,
+      host: Host?,
       token: String?,
       headers: List<ServerRequestHeader>,
       accessToken: String?,
     ) = host != cachedHost || token != cachedToken || headers != cachedHeaders || accessToken != cachedAccessToken
-
-    companion object {
-      private const val TAG = "AudioBookShelfApiService"
-    }
   }
