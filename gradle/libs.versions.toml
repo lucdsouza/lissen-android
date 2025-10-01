@@ -2,7 +2,7 @@
 acraCore = "5.12.0"
 agp = "8.9.3"
 browser = "1.9.0"
-coilCompose = "2.7.0"
+coilCompose = "3.3.0"
 composeShimmerAndroid = "1.3.3"
 converterGson = "3.0.0"
 glance = "1.2.0-beta01"
@@ -11,25 +11,26 @@ hiltNavigationCompose = "1.3.0"
 hokoBlur = "1.5.5"
 kotlin = "2.2.20"
 activityCompose = "1.11.0"
-composeBom = "2025.09.00"
+composeBom = "2025.09.01"
 compose = "1.7.8"
 localbroadcastmanager = "1.1.0"
 loggingInterceptor = "5.1.0"
-material = "1.9.1"
-material3 = "1.3.2"
+material = "1.9.2"
+material3 = "1.4.0"
 materialVersion = "1.13.0"
 media3Exoplayer = "1.8.0"
-navigationCompose = "2.9.4"
+navigationCompose = "2.9.5"
 okhttp = "5.1.0"
 pagingCompose = "3.3.6"
 retrofit = "3.0.0"
-roomRuntime = "2.8.0"
-runtimeLivedata = "1.9.1"
+roomRuntime = "2.8.1"
+runtimeLivedata = "1.9.2"
 media3Session = "1.8.0"
 media3DatasourceOkhttp = "1.8.0"
 lifecycleService = "2.9.4"
 lifecycleProcess = "2.9.4"
 coreKtx = "1.17.0"
+timber = "5.0.1"
 
 [libraries]
 acra-core = { module = "ch.acra:acra-core", version.ref = "acraCore" }
@@ -52,8 +53,8 @@ androidx-paging-compose = { module = "androidx.paging:paging-compose", version.r
 androidx-room-compiler = { module = "androidx.room:room-compiler", version.ref = "roomRuntime" }
 androidx-room-ktx = { module = "androidx.room:room-ktx", version.ref = "roomRuntime" }
 androidx-room-runtime = { module = "androidx.room:room-runtime", version.ref = "roomRuntime" }
-coil-compose = { module = "io.coil-kt:coil-compose", version.ref = "coilCompose" }
-coil-svg = { module = "io.coil-kt:coil-svg", version.ref = "coilCompose" }
+coil-compose = { module = "io.coil-kt.coil3:coil-compose", version.ref = "coilCompose" }
+coil-svg = { module = "io.coil-kt.coil3:coil-svg", version.ref = "coilCompose" }
 compose-shimmer-android = { module = "com.valentinilk.shimmer:compose-shimmer-android", version.ref = "composeShimmerAndroid" }
 converter-gson = { module = "com.squareup.retrofit2:converter-gson", version.ref = "converterGson" }
 hilt-android = { module = "com.google.dagger:hilt-android", version.ref = "hiltAndroid" }
@@ -78,6 +79,7 @@ androidx-media3-datasource-okhttp = { group = "androidx.media3", name = "media3-
 androidx-lifecycle-service = { group = "androidx.lifecycle", name = "lifecycle-service", version.ref = "lifecycleService" }
 androidx-lifecycle-process = { group = "androidx.lifecycle", name = "lifecycle-process", version.ref = "lifecycleProcess" }
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
+timber = { module = "com.jakewharton.timber:timber", version.ref = "timber" }
 
 [plugins]
 compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }

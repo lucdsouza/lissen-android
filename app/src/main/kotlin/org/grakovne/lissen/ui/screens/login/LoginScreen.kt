@@ -1,6 +1,5 @@
 package org.grakovne.lissen.ui.screens.login
 
-import android.util.Log
 import android.widget.Toast
 import android.widget.Toast.LENGTH_SHORT
 import androidx.compose.foundation.layout.Box
@@ -65,6 +64,7 @@ import org.grakovne.lissen.ui.extensions.withMinimumTime
 import org.grakovne.lissen.ui.navigation.AppNavigationService
 import org.grakovne.lissen.viewmodel.LoginViewModel
 import org.grakovne.lissen.viewmodel.LoginViewModel.LoginState
+import timber.log.Timber
 
 @OptIn(FlowPreview::class)
 @Composable
@@ -90,7 +90,7 @@ fun LoginScreen(
     }
 
     withMinimumTime(300) {
-      Log.d(TAG, "Tried to log in with result $loginState and possible error is $loginState")
+      Timber.d("Tried to log in with result $loginState and possible error is $loginState")
     }
 
     when (loginState) {
@@ -147,7 +147,7 @@ fun LoginScreen(
             value = host,
             onValueChange = { viewModel.setHost(it.trim()) },
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Uri),
-            label = { Text(stringResource(R.string.login_screen_server_url_input)) },
+            label = { Text(stringResource(R.string.hint_server_url_input)) },
             shape = RoundedCornerShape(16.dp),
             singleLine = true,
             modifier =
@@ -314,5 +314,3 @@ fun LoginScreen(
     },
   )
 }
-
-private const val TAG: String = "LoginScreen"
