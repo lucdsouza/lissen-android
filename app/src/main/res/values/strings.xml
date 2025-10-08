@@ -79,6 +79,7 @@
     <string name="downloads_menu_download_option_clear_chapters">Clear downloaded chapters</string>
     <string name="downloads_menu_download_option_clear_episodes">Clear downloaded episodes</string>
     <string name="downloads_menu_download_option_clear_items">Clear downloaded items</string>
+    <string name="downloads_menu_download_option_stop_downloads">Stop downloading</string>
     <string name="mini_player_action_close">Close</string>
     <string name="playing_item_details_author">Author</string>
     <string name="playing_item_details_publisher">Publisher</string>
@@ -148,4 +149,7 @@
     <string name="settings_screen_clear_thumbnail_cache_title">Clear thumbnail cache</string>
     <string name="settings_screen_clear_thumbnail_cache_hint">Remove cached thumbnails to free up space.</string>
     <string name="settings_screen_clear_thumbnail_cache_success_toast">Thumbnail cache cleared</string>
+    <string name="settings_screen_delay_autodownload_title">Delay automatic download</string>
+    <string name="settings_screen_delay_autodownload_description">Wait a short time before starting download</string>
+
 </resources>
