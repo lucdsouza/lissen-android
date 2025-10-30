@@ -9,7 +9,7 @@ sealed class OperationResult<T> {
   ) : OperationResult<T>()
 
   data class Error<T>(
-    val code: ApiError,
+    val code: OperationError,
     val message: String? = null,
   ) : OperationResult<T>()
 
