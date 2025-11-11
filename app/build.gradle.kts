@@ -28,6 +28,17 @@ ksp {
   arg("room.schemaLocation", "$projectDir/schemas")
 }
 
+fun gitCommitHash(): String {
+  return try {
+    val process = ProcessBuilder("git", "rev-parse", "--short", "HEAD")
+      .redirectErrorStream(true)
+      .start()
+    process.inputStream.bufferedReader().use { it.readText().trim() }
+  } catch (e: Exception) {
+    "stable"
+  }
+}
+
 android {
   namespace = "org.grakovne.lissen"
   compileSdk = 36
@@ -37,16 +48,20 @@ android {
   }
   
   defaultConfig {
+    val commitHash = gitCommitHash()
+    
     applicationId = "org.grakovne.lissen"
     minSdk = 28
     targetSdk = 36
-    versionCode = 10708
-    versionName = "1.7.8"
+    versionCode = 10709
+    versionName = "1.7.9-$commitHash"
+    
+    buildConfigField("String", "GIT_HASH", "\"$commitHash\"")
     
     testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     
-    val acraReportLogin = "VxOasuhbz9DP5HTy"
-    val acraReportPassword = "21E1sv6utE36sbpm"
+    val acraReportLogin = "8yJ59n0UToCja8LR"
+    val acraReportPassword = "kuW9TV7BbJByuIAc"
     
     buildConfigField("String", "ACRA_REPORT_LOGIN", "\"$acraReportLogin\"")
     buildConfigField("String", "ACRA_REPORT_PASSWORD", "\"$acraReportPassword\"")
@@ -64,6 +79,7 @@ android {
       }
     }
   }
+
   
   buildTypes {
     release {
