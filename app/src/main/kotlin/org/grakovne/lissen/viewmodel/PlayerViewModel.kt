@@ -8,8 +8,10 @@ import androidx.lifecycle.viewModelScope
 import androidx.media3.common.util.UnstableApi
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import org.grakovne.lissen.content.LissenMediaProvider
 import org.grakovne.lissen.lib.domain.DetailedItem
 import org.grakovne.lissen.lib.domain.PlayingChapter
+import org.grakovne.lissen.lib.domain.PlayingHistoryItem
 import org.grakovne.lissen.lib.domain.TimerOption
 import org.grakovne.lissen.persistence.preferences.LissenSharedPreferences
 import org.grakovne.lissen.playback.MediaRepository
@@ -20,6 +22,7 @@ import javax.inject.Inject
 class PlayerViewModel
   @Inject
   constructor(
+    private val mediaChannel: LissenMediaProvider,
     private val mediaRepository: MediaRepository,
     private val preferences: LissenSharedPreferences,
   ) : ViewModel() {
@@ -36,6 +39,9 @@ class PlayerViewModel
 
     private val _playingQueueExpanded = MutableLiveData(false)
     val playingQueueExpanded: LiveData<Boolean> = _playingQueueExpanded
+
+    private val _playingHistory = MutableLiveData(emptyList<PlayingHistoryItem>())
+    private val playingHistory: LiveData<List<PlayingHistoryItem>> = _playingHistory
 
     val isPlaybackReady: LiveData<Boolean> = mediaRepository.isPlaybackReady
     val playbackSpeed: LiveData<Float> = mediaRepository.playbackSpeed
@@ -127,6 +133,22 @@ class PlayerViewModel
     fun prepareAndPlay() {
       val playingBook = preferences.getPlayingBook() ?: return
       mediaRepository.prepareAndPlay(playingBook)
+    }
+
+    fun fetchPlayingHistory() {
+      val playingItem = book.value ?: return
+      val currentLibrary = playingItem.libraryId ?: return
+
+      viewModelScope.launch {
+        mediaChannel
+          .providePlayingHistory(
+            libraryId = currentLibrary,
+            itemId = playingItem.id,
+          ).fold(
+            onSuccess = { _playingHistory.postValue(it) },
+            onFailure = { _playingHistory.postValue(emptyList()) },
+          )
+      }
     }
 
     companion object {

@@ -318,6 +318,7 @@ fun PlayerScreen(
 
   if (itemPlayingHistorySelected) {
     ListeningHistoryComposable(
+      playerViewModel = playerViewModel,
       onItemSelected = {},
       onDismissRequest = { itemPlayingHistorySelected = false },
     )

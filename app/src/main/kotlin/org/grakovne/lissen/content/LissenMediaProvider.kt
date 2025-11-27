@@ -15,6 +15,7 @@ import org.grakovne.lissen.lib.domain.LibraryType
 import org.grakovne.lissen.lib.domain.PagedItems
 import org.grakovne.lissen.lib.domain.PlaybackProgress
 import org.grakovne.lissen.lib.domain.PlaybackSession
+import org.grakovne.lissen.lib.domain.PlayingHistoryItem
 import org.grakovne.lissen.lib.domain.RecentBook
 import org.grakovne.lissen.lib.domain.UserAccount
 import org.grakovne.lissen.persistence.preferences.LissenSharedPreferences
@@ -89,6 +90,11 @@ class LissenMediaProvider
           )
       }
     }
+
+    suspend fun providePlayingHistory(
+      libraryId: String,
+      itemId: String,
+    ): OperationResult<List<PlayingHistoryItem>> = OperationResult.Success(emptyList())
 
     suspend fun searchBooks(
       libraryId: String,

@@ -20,13 +20,15 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import org.grakovne.lissen.lib.domain.ListeningHistoryItem
+import org.grakovne.lissen.lib.domain.PlayingHistoryItem
 import org.grakovne.lissen.ui.extensions.formatTime
+import org.grakovne.lissen.viewmodel.PlayerViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ListeningHistoryComposable(
-  onItemSelected: (ListeningHistoryItem) -> Unit,
+  playerViewModel: PlayerViewModel,
+  onItemSelected: (PlayingHistoryItem) -> Unit,
   onDismissRequest: () -> Unit,
 ) {
   ModalBottomSheet(
@@ -63,7 +65,7 @@ fun ListeningHistoryComposable(
                   )
 
                   Text(
-                    text = item.position.formatTime(),
+                    text = item.chapterPosition.toInt().formatTime(),
                     style = typography.bodyMedium,
                   )
                 }
@@ -87,10 +89,4 @@ fun ListeningHistoryComposable(
   )
 }
 
-private val HistoryStubItems =
-  listOf(
-    ListeningHistoryItem("Глава 1", 9100),
-    ListeningHistoryItem("Глава 2", 9120),
-    ListeningHistoryItem("Глава 3", 10000),
-    ListeningHistoryItem("Глава 4", 10500),
-  )
+private val HistoryStubItems = emptyList<PlayingHistoryItem>()
