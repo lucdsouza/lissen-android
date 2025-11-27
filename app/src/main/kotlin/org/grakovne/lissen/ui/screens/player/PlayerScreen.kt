@@ -21,7 +21,12 @@ import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.outlined.ArrowBack
+import androidx.compose.material.icons.outlined.AvTimer
+import androidx.compose.material.icons.outlined.History
+import androidx.compose.material.icons.outlined.HistoryEdu
 import androidx.compose.material.icons.outlined.Info
+import androidx.compose.material.icons.outlined.Schedule
+import androidx.compose.material.icons.outlined.Timeline
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -52,6 +57,7 @@ import org.grakovne.lissen.R
 import org.grakovne.lissen.lib.domain.DetailedItem
 import org.grakovne.lissen.ui.icons.Search
 import org.grakovne.lissen.ui.navigation.AppNavigationService
+import org.grakovne.lissen.ui.screens.player.composable.ListeningHistoryComposable
 import org.grakovne.lissen.ui.screens.player.composable.MediaDetailComposable
 import org.grakovne.lissen.ui.screens.player.composable.NavigationBarComposable
 import org.grakovne.lissen.ui.screens.player.composable.PlayingQueueComposable
@@ -93,6 +99,7 @@ fun PlayerScreen(
   val searchRequested by playerViewModel.searchRequested.observeAsState(false)
 
   var itemDetailsSelected by remember { mutableStateOf(false) }
+  var itemPlayingHistorySelected by remember { mutableStateOf(false) }
 
   val screenTitle =
     when (playingQueueExpanded) {
@@ -170,6 +177,16 @@ fun PlayerScreen(
             }
           } else {
             Row {
+              IconButton(
+                onClick = { itemPlayingHistorySelected = true },
+                modifier = Modifier.padding(end = 4.dp),
+              ) {
+                Icon(
+                  imageVector = Icons.Outlined.History,
+                  contentDescription = null,
+                )
+              }
+
               IconButton(
                 onClick = { itemDetailsSelected = true },
                 modifier = Modifier.padding(end = 4.dp),
@@ -296,6 +313,13 @@ fun PlayerScreen(
       playingViewModel = playerViewModel,
       settingsViewModel = settingsViewModel,
       onDismissRequest = { itemDetailsSelected = false },
+    )
+  }
+
+  if (itemPlayingHistorySelected) {
+    ListeningHistoryComposable(
+      onItemSelected = {},
+      onDismissRequest = { itemPlayingHistorySelected = false },
     )
   }
 }
