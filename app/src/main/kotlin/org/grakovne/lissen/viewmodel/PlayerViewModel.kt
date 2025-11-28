@@ -128,11 +128,16 @@ class PlayerViewModel
 
     fun previousTrack() = mediaRepository.previousTrack()
 
-    fun togglePlayPause() = mediaRepository.togglePlayPause()
+    fun togglePlayPause() = {
+      mediaRepository.togglePlayPause()
+      fetchPlayingHistory()
+    }
 
     fun prepareAndPlay() {
       val playingBook = preferences.getPlayingBook() ?: return
       mediaRepository.prepareAndPlay(playingBook)
+      
+      fetchPlayingHistory()
     }
 
     fun fetchPlayingHistory() {
