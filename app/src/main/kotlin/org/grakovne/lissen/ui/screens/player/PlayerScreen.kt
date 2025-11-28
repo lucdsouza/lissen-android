@@ -98,6 +98,8 @@ fun PlayerScreen(
   val playingQueueExpanded by playerViewModel.playingQueueExpanded.observeAsState(false)
   val searchRequested by playerViewModel.searchRequested.observeAsState(false)
 
+  val playingHistory by playerViewModel.playingHistory.observeAsState(emptyList())
+
   var itemDetailsSelected by remember { mutableStateOf(false) }
   var itemPlayingHistorySelected by remember { mutableStateOf(false) }
 
@@ -177,14 +179,16 @@ fun PlayerScreen(
             }
           } else {
             Row {
-              IconButton(
-                onClick = { itemPlayingHistorySelected = true },
-                modifier = Modifier.padding(end = 4.dp),
-              ) {
-                Icon(
-                  imageVector = Icons.Outlined.History,
-                  contentDescription = null,
-                )
+              if (playingHistory.isNotEmpty()) {
+                IconButton(
+                  onClick = { itemPlayingHistorySelected = true },
+                  modifier = Modifier.padding(end = 4.dp),
+                ) {
+                  Icon(
+                    imageVector = Icons.Outlined.History,
+                    contentDescription = null,
+                  )
+                }
               }
 
               IconButton(
@@ -318,7 +322,7 @@ fun PlayerScreen(
 
   if (itemPlayingHistorySelected) {
     ListeningHistoryComposable(
-      playerViewModel = playerViewModel,
+      playingHistoryItem = playingHistory,
       onItemSelected = {},
       onDismissRequest = { itemPlayingHistorySelected = false },
     )

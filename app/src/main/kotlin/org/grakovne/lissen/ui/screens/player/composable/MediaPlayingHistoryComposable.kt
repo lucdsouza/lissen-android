@@ -27,7 +27,7 @@ import org.grakovne.lissen.viewmodel.PlayerViewModel
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ListeningHistoryComposable(
-  playerViewModel: PlayerViewModel,
+  playingHistoryItem: List<PlayingHistoryItem>,
   onItemSelected: (PlayingHistoryItem) -> Unit,
   onDismissRequest: () -> Unit,
 ) {
@@ -51,7 +51,7 @@ fun ListeningHistoryComposable(
         Spacer(modifier = Modifier.height(8.dp))
 
         LazyColumn(modifier = Modifier.fillMaxWidth()) {
-          itemsIndexed(HistoryStubItems) { index, item ->
+          itemsIndexed(playingHistoryItem) { index, item ->
             ListItem(
               headlineContent = {
                 Row(
@@ -79,7 +79,7 @@ fun ListeningHistoryComposable(
                   },
             )
 
-            if (index < HistoryStubItems.size - 1) {
+            if (index < playingHistoryItem.size - 1) {
               HorizontalDivider()
             }
           }
@@ -88,5 +88,3 @@ fun ListeningHistoryComposable(
     },
   )
 }
-
-private val HistoryStubItems = emptyList<PlayingHistoryItem>()

@@ -41,7 +41,7 @@ class PlayerViewModel
     val playingQueueExpanded: LiveData<Boolean> = _playingQueueExpanded
 
     private val _playingHistory = MutableLiveData(emptyList<PlayingHistoryItem>())
-    private val playingHistory: LiveData<List<PlayingHistoryItem>> = _playingHistory
+    val playingHistory: LiveData<List<PlayingHistoryItem>> = _playingHistory
 
     val isPlaybackReady: LiveData<Boolean> = mediaRepository.isPlaybackReady
     val playbackSpeed: LiveData<Float> = mediaRepository.playbackSpeed
@@ -128,15 +128,16 @@ class PlayerViewModel
 
     fun previousTrack() = mediaRepository.previousTrack()
 
-    fun togglePlayPause() = {
-      mediaRepository.togglePlayPause()
-      fetchPlayingHistory()
-    }
+    fun togglePlayPause() =
+      {
+        mediaRepository.togglePlayPause()
+        fetchPlayingHistory()
+      }
 
     fun prepareAndPlay() {
       val playingBook = preferences.getPlayingBook() ?: return
       mediaRepository.prepareAndPlay(playingBook)
-      
+
       fetchPlayingHistory()
     }
 
